@@ -496,3 +496,260 @@ This formula combines:
 
 
 By going beyond simple conversion rates, this contribution framework clarifies **which behaviours are moving the needle**, and where intervention can yield measurable impact — both in performance and efficiency.
+
+
+## 7. Combined Segment Contribution & Strategic Segmentation
+
+While individual behavioural features offer useful insights, user behaviour often reflects **combinations of multiple traits**. This section quantifies how behavioural combinations influence overall conversion, and identifies high-impact segments for targeted strategic actions.
+
+
+
+### 7.1. Methodology: Contribution Score for Behaviour Combinations
+
+Segments were constructed using combinations of the top three behavioural features identified in Section 6:
+
+- `first_visit_delay` (0, 1, 2 days)  
+- `main_time_block` (e.g. early morning, morning, afternoon)  
+- `visit_day_type` (weekday, weekend, both)
+
+For each segment, a **contribution score** was calculated using the following formula:
+- Contribution_i = ((p_i - p̄) / σ) × v_i
+
+Where:
+- `p_i`: conversion rate of segment *i*  
+- `p̄`: average conversion rate across all segments  
+- `σ`: standard deviation of conversion rates  
+- `v_i`: proportion of total users in segment *i*
+
+This formulation captures both **relative conversion performance (Z-score)** and **user volume (business impact)**.
+
+
+
+### 7.2. Top vs Bottom Contribution Segments
+<img src="https://github.com/user-attachments/assets/3e6a25c2-000d-4b23-b05d-24b668473b14" width="600"/>
+
+
+The figure above presents the top five and bottom five segment combinations ranked by contribution score.
+
+#### Top-Contributing Segments
+
+| Segment Combination                | Conversion Rate | User Share | Contribution Score | Characteristics                          |
+|-----------------------------------|------------------|-------------|---------------------|------------------------------------------|
+| 1-day × Afternoon × Weekday       | 51.4%            | 6%          | +0.041              | Planned usage, staff availability        |
+| 1-day × Morning × Weekday         | 46.2%            | 14%         | +0.012              | High intent, routine alignment           |
+| 2-day × Morning × Weekday         | 47.9%            | 4%          | +0.011              | Stable environment, low congestion       |
+| 1-day × Afternoon × Both          | 50.0%            | 2%          | +0.010              | Cross-day flexibility, consistent intent |
+| 2-day × Afternoon × Weekday       | 45.7%            | 3%          | +0.009              | Deliberate use, structured timing        |
+
+**Interpretation**:  
+All top-performing segments share key behavioural traits:
+- **Delayed first visit** (1–2 days after sign-up), indicating planning
+- **Weekday usage** aligned with office norms
+- **Use during staffed hours** (morning or afternoon), where trial quality is stable
+
+
+
+#### Bottom-Contributing Segments
+
+| Segment Combination                | Conversion Rate | User Share | Contribution Score | Characteristics                          |
+|-----------------------------------|------------------|-------------|---------------------|------------------------------------------|
+| 0-day × Early Morning × Weekday   | 29.7%            | 9%          | –0.031              | Impulsive use, limited guidance          |
+| 1-day × Morning × Weekend         | 28.8%            | 4%          | –0.014              | Off-hour friction                        |
+| 0-day × Night × Weekend           | 25.9%            | 3%          | –0.012              | Low trial quality, unmanned time block   |
+| 0-day × Early Morning × Weekend   | 28.2%            | 5%          | –0.011              | Non-optimal use conditions               |
+| 0-day × Afternoon × Weekend       | 29.3%            | 6%          | –0.010              | High volume, low planning intent         |
+
+**Interpretation**:  
+Bottom-performing segments frequently share:
+- **Same-day visits**, indicating low engagement planning
+- **Weekend or off-hour usage**, where service quality may be lower
+- **Relatively high user volumes**, making them critical to address despite weak conversion
+
+
+
+### 7.3. Strategic Segment Grouping
+
+Based on contribution scores and behavioural traits, two strategic macro-segments were defined to support intervention design.
+
+#### Core Hours Segment (High Intent)
+
+**Definition**:
+- `main_time_block` ∈ {morning, afternoon}  
+- `visit_day_type` ∈ {weekday, both}  
+- `first_visit_delay` ∈ {1, 2}
+
+| Metric        | Value     |
+|---------------|-----------|
+| Trial Users   | 1,325     |
+| Paid Users    | 564       |
+| Conversion    | 42.6%     |
+
+**Segment Characteristics**:
+- Visits occur during **staffed hours**
+- Usage is typically **planned and intentional**
+- Conversion efficiency is **consistently high**
+
+**Recommended Actions**:
+- Enhance onboarding flow and trial guidance  
+- Strengthen workspace experience (e.g. lighting, seating)  
+- Introduce targeted nudges or satisfaction follow-ups
+
+
+
+#### Unmanned Hours Segment (Experience Risk)
+
+**Definition**:
+- `main_time_block` ∈ {early morning, night, midnight, evening}  
+- or `visit_day_type` = weekend  
+- Often includes `first_visit_delay` = 0
+
+| Metric        | Value     |
+|---------------|-----------|
+| Trial Users   | 2,290     |
+| Paid Users    | 777       |
+| Conversion    | 33.9%     |
+
+**Segment Characteristics**:
+- High usage during **off-hours** when staff may not be available  
+- Onboarding and space experience may be suboptimal  
+- High volume, yet **low contribution to conversion**
+
+**Recommended Actions**:
+- Improve trial support via QR-based self-guidance tools  
+- Ensure physical quality (cleanliness, lighting) during unmanned periods  
+- Consider light staffing pilots for high-traffic off-hours
+
+
+
+### 7.4. Projected Impact from Targeted Improvements
+
+Even modest improvements in each strategic segment would yield measurable business gains:
+
+| Segment              | Trial Users | Current Conv. Rate | +1%p Paid Users | Uplift to Overall Rate |
+|----------------------|-------------|---------------------|------------------|-------------------------|
+| Core Hours Segment   | 1,325       | 42.6%               | +13.25           | +0.35%p                 |
+| Unmanned Hours Group | 2,290       | 33.9%               | +22.90           | +0.60%p                 |
+
+**Combined potential uplift**: **+0.95%p** to the total conversion rate, without increasing user acquisition.
+
+
+
+### 7.5. Summary
+
+- Combined behaviours offer greater precision than individual traits
+- **Top-contributing segments** reflect planned, weekday use during staffed hours
+- **Bottom segments** signal rushed or unsupported usage in off-hour conditions
+- Two strategic segments were identified for focused action:
+  - Core Hours (high ROI, low-cost improvement)
+  - Unmanned Hours (volume leverage, trial quality repair)
+
+The following section presents practical recommendations based on these findings.
+
+---
+
+## 8. Strategic Recommendations & Business Impact
+
+Building on the segment-level findings in Section 7, this section outlines actionable strategies tailored to the two macro segments identified — with a focus on improving trial-to-payment conversion without increasing acquisition cost.
+
+
+
+### 8.1. Operational Time-Based Segmentation Strategy
+
+The top- and bottom-contributing behavioural segments revealed a clear distinction based on **operational hours**:
+
+- High-performing segments:  
+  → Weekday use during staffed hours (morning/afternoon)  
+  → 1–2 day delay before first visit
+
+- Low-performing segments:  
+  → Same-day visits during weekends or unmanned hours  
+  → Often experience issues with onboarding or environment quality
+
+This operational distinction supports a **macro segmentation approach**:
+
+
+
+#### 🟦 Core Hours Segment (Staffed, Intentional Users)
+
+**Definition**:  
+- `main_time_block` ∈ {morning, afternoon}  
+- `visit_day_type` ∈ {weekday, both}
+
+**Profile**:
+- Trial Users: 1,325  
+- Paid Users: 564  
+- Conversion Rate: 42.6%
+
+**Behavioural Traits**:
+- Visits occur during **core business hours**
+- Usage reflects **structured intent and evaluation behaviour**
+- Users likely to assess suitability for focused work or productivity
+
+**Strategic Implications**:
+- Ensure a high-quality trial environment during core hours  
+- Reinforce positive impressions through follow-up emails or feedback requests  
+- Emphasise workspace attributes such as lighting, noise control, and comfort
+
+**Recommended Actions**:
+- Streamline onboarding (e.g. clear orientation signage, welcome emails)  
+- Offer satisfaction surveys after trial ends  
+- Maintain consistent workspace standards during core times
+
+
+
+#### 🟥 Unmanned Hours Segment (Off-Hour Risk Group)
+
+**Definition**:  
+- `main_time_block` ∈ {early morning, evening, night, midnight}  
+- or `visit_day_type` = weekend
+
+**Profile**:
+- Trial Users: 2,290  
+- Paid Users: 777  
+- Conversion Rate: 33.9%
+
+**Behavioural Traits**:
+- Usage occurs during **unattended or lightly staffed hours**
+- Trial experience may be negatively impacted by:
+  - Lack of guidance
+  - Poor lighting or cleanliness
+  - Ambiguity about workspace zones
+
+**Strategic Implications**:
+- Despite weaker performance, this group comprises nearly **double the user volume** of the Core Hours segment
+- Improvements here can yield significant absolute gains in conversion and user satisfaction
+
+**Recommended Actions**:
+- Install **QR-based self-guided orientation flows** (e.g. “How to use the space”)  
+- Enhance **off-hour physical environment**: lighting, temperature, cleanliness  
+- Introduce **pilot light staffing programmes** during high-traffic off-hours (e.g. Saturday mornings)
+
+
+
+### 8.2. Projected Impact of +1%p Conversion Uplift
+
+Assuming a +1 percentage point increase in conversion rate for each strategic segment:
+
+| Segment              | Trial Users | Current Conv. Rate | Additional Paid Users | Total Conv. Uplift |
+|----------------------|-------------|---------------------|------------------------|---------------------|
+| Core Hours Segment   | 1,325       | 42.6%               | +13.25                 | +0.35%p             |
+| Unmanned Hours Group | 2,290       | 33.9%               | +22.90                 | +0.60%p             |
+
+**Combined potential uplift**: **+0.95%p**, achieved through **operational improvements** rather than additional marketing or acquisition.
+
+
+
+### 8.3. Summary & Strategic Takeaways
+
+| Strategic Focus           | Recommendation                                              | Expected Benefit              |
+|---------------------------|--------------------------------------------------------------|-------------------------------|
+| Core Hours Segment        | Refine onboarding, maintain workspace quality               | Fast ROI, low intervention cost |
+| Unmanned Hours Segment    | Improve off-hour experience, add orientation materials       | High-volume leverage, brand trust |
+
+Both strategies offer **cost-effective** methods for improving conversion by enhancing the existing trial experience — rather than expanding acquisition channels.
+
+The segmentation framework also provides a foundation for future initiatives, including:
+- Time-sensitive trial messaging  
+- Personalised onboarding flows  
+- Operational scheduling and site staffing decisions
+
