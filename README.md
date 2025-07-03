@@ -118,8 +118,7 @@ To contextualise the trial-to-payment challenge, the full business flow was mapp
 
 The dashboard below summarises the full trial-to-payment flow and conversion trends across a **32-month period (June 2021 – December 2023)**.
 
-
-<img src="https://github.com/user-attachments/assets/070d1657-da8a-4884-9282-8c3408721e85" width="600"/>
+<img src="https://github.com/user-attachments/assets/97c3b336-ecd9-4968-9717-aaa80c270cb6" width="800"/>
 
 
 **Key Figures**:
