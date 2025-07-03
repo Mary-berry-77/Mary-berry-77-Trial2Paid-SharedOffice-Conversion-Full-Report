@@ -340,3 +340,159 @@ Based on the findings:
 - This ensures the analysis reflects **autonomous user behaviour**, not one shaped by external restrictions, and delivers more accurate and actionable insights.
 
 
+---
+## 6. Conversion Contribution Analysis (Post-Pandemic Only)
+
+To identify the most impactful behavioural signals for payment conversion, this section quantifies each trial user segment’s contribution — considering not only **conversion rate**, but also **user volume**. This dual lens reveals where strategic efforts can generate the greatest return on investment (ROI).
+
+
+
+### 6.1. Key Behavioural Signals Based on Feature Importance
+
+To identify which user behaviours are most closely associated with conversion, we trained an **XGBoost classifier** using post-pandemic trial user data. This model was not intended for deployment, but rather to extract **relative feature importance** for further behavioural analysis.
+
+**Model Summary**:
+- Model: XGBoost Classifier
+- Class Imbalance Handling: SMOTE (sampling_strategy=0.75) for minority class (paid users)
+- Encoding: One-hot encoding for categorical features
+- Key Parameters:
+  - `n_estimators`: 150  
+  - `max_depth`: 3  
+  - `learning_rate`: 0.05  
+  - `subsample`: 0.8  
+  - `colsample_bytree`: 0.8  
+  - `scale_pos_weight`: 2  
+  - Threshold: Adjusted to 0.55 (↑ from default 0.5)
+
+**Model Performance**:
+
+| Metric             | Value  |
+|--------------------|--------|
+| Accuracy           | 56.5%  |
+| F1 Score           | 0.55   |
+| ROC–AUC            | 0.651  |
+| Precision (Paid)   | 0.45   |
+| Recall (Paid)      | 0.72 ✅ |
+
+→ The model prioritised **recall**, capturing as many actual converters as possible, even at the cost of precision — ideal for exploratory behavioural discovery.
+
+**Top Behavioural Features** (aggregated by original variables):
+1. `main_time_block` – time of day users accessed the service
+2. `visit_day_type` – weekday vs weekend usage
+3. `first_visit_delay` – number of days between sign-up and first visit
+
+These features form the foundation for the next stage of analysis.
+
+
+
+### 6.2. Contribution by Key Behavioural Features
+
+Conversion rate alone can be misleading. Some groups may convert well but represent a small share of users. Others may convert poorly but account for a large proportion of the user base — silently dragging down overall performance.
+
+To capture both dimensions, we calculated a **Contribution Score** for each segment:
+
+#### 🧮 Contribution Score Formula
+
+Contribution_i = ((p_i - p̄) / σ) × v_i
+
+Where:
+- p_i: Conversion rate of segment i
+- p̄: Average conversion rate across all segments
+- σ: Standard deviation of conversion rates
+- v_i: User volume share of segment i (as a proportion)
+
+
+This formula combines:
+- **Conversion efficiency** (via Z-score)
+- **Business importance** (via user volume)
+
+
+
+#### 1) Main Usage Time (`main_time_block
+
+<img src="https://github.com/user-attachments/assets/06cecd11-fe84-4c74-9aa3-cceeab43ea73" width="600"/>
+
+
+**Graph Interpretation**:
+- **Afternoon users** are a small group but show **the highest conversion rate**.
+- **Early morning users** dominate in volume but perform poorly — making them the largest hidden drag on overall performance.
+
+**Table**:
+
+| Time Block     | Conversion Rate | Z-score | Volume Share | Contribution | Interpretation              |
+|----------------|------------------|---------|---------------|--------------|-----------------------------|
+| Afternoon      | 45.7%            | +2.11   | 13.1%         | **+0.277** ✅ | High efficiency, moderate volume — strong uplift |
+| Early Morning  | 34.3%            | –0.67   | 42.6%         | **–0.287** ⚠ | Low efficiency, largest base — high-impact drag |
+| Morning        | 37.3%            | +0.06   | 32.2%         | +0.020       | Neutral baseline            |
+| Midnight       | 36.3%            | –0.18   | 10.4%         | –0.019       | Minor negative              |
+| Evening        | 37.8%            | +0.17   | 1.2%          | +0.002       | Niche group                 |
+| Night          | 43.8%            | +1.63   | 0.4%          | +0.007       | High conversion, low volume — little impact |
+
+**Strategic Insight**:
+- Afternoon = high-performing, underutilised  
+  → Worth amplifying through guided onboarding or incentives
+- Early morning = large but weak  
+  → Must diagnose cause: lack of staff? unclear signage? poor atmosphere?
+
+
+
+#### 2) Visit Day Type (`visit_day_type`)
+
+<img src="https://github.com/user-attachments/assets/42dc7e4e-117e-4315-806d-f585094a5989" width="600"/>
+
+
+**Graph Interpretation**:
+- **Weekday users** dominate both in count and conversion — core group.
+- **Weekend-only users** have a noticeable conversion drop — a silent drag.
+
+**Table**:
+
+| Visit Day Type | Conversion Rate | Z-score | Volume Share | Contribution | Interpretation                  |
+|----------------|------------------|---------|---------------|--------------|---------------------------------|
+| Weekday        | 38.4%            | +0.23   | 74.1%         | **+0.174** ✅ | Reliable base — optimise experience further |
+| Weekend        | 28.5%            | –1.47   | 17.2%         | **–0.253** ⚠ | Substantial group, weak output |
+| Both           | 42.3%            | +0.90   | 8.8%          | +0.079       | Small but efficient             |
+
+**Strategic Insight**:
+- Weekday = stable foundation  
+  → Maintain quality and responsiveness  
+- Weekend = opportunity for correction  
+  → Consider staffing, environment, or digital assistance improvements
+
+
+
+#### 3) First Visit Delay (`first_visit_delay`)
+
+<img src="https://github.com/user-attachments/assets/cc1d4b1a-ac37-49f9-b818-b820eaa72962" width="600"/>
+
+**Graph Interpretation**:
+- Users who visit **1–2 days after signing up** convert much better than those who visit immediately.
+- **Same-day visitors** account for 30% of users but have **the lowest conversion rate**.
+
+**Table**:
+
+| Delay (Days)   | Conversion Rate | Z-score | Volume Share | Contribution | Interpretation                  |
+|----------------|------------------|---------|---------------|--------------|---------------------------------|
+| 0 (Same-day)   | 33.1%            | –1.41   | 30%           | **–0.396** ⚠ | Low-intent, impulsive behaviour |
+| 1 Day          | 39.3%            | +0.68   | 45%           | **+0.391** ✅ | Strong intent, top contributor  |
+| 2 Days         | 39.5%            | +0.73   | 12%           | +0.109       | Also high-performing            |
+
+**Strategic Insight**:
+- Encourage a **1–2 day delay** post-signup through onboarding design (e.g. follow-up emails, tour scheduling)
+- Avoid over-promoting same-day usage — it may **attract casual or low-intent users**
+
+
+
+### 6.3. Summary of Behavioural Contributions
+
+| Segment Type          | Strategic Message                                                |
+|------------------------|------------------------------------------------------------------|
+| Afternoon Users        | High conversion, under-leveraged — **expand presence**           |
+| Early Morning Users    | Largest group, low impact — **requires urgent experience review**|
+| Weekday Visitors       | Strong foundation — **enhance and retain**                       |
+| Weekend-Only Visitors  | Silent underperformers — **improve off-hour conditions**         |
+| Same-day Visitors      | Low intent — **refine onboarding to reduce premature visits**     |
+
+
+
+By going beyond simple conversion rates, this contribution framework clarifies **which behaviours are moving the needle**, and where intervention can yield measurable impact — both in performance and efficiency.
